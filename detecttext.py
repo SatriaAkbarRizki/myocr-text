@@ -36,8 +36,6 @@ class TextOCRMobile:
             print("Error processing ocr")
 
 
-
-
     def convertImagetoCV(self):
         img = cv2.imread(self.pathImage)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -47,7 +45,6 @@ class TextOCRMobile:
 
 
     def processOCR(self):
-        
         doc = DocumentFile.from_images(self.pathImage)
         result = self.model(doc)
         self.responsText = result.export()
@@ -61,17 +58,11 @@ class TextOCRMobile:
                         if len(word["value"])>= 2 and float(word['confidence']) >= 0.60:
                             response_list.append(word['value'])
 
-        self.saveImageOCR()
+        # self.saveImageOCR()
 
         self.responsText = ' '.join(response_list)
-    
-
-        # print(response_list)
-        # print(json_output)
         print(self.responsText)
         result.show()
-
-        
 
 
         listRemove = [self.pathImage,"storage/images/images_clean.jpg" ]
@@ -79,26 +70,26 @@ class TextOCRMobile:
             os.remove(x)
 
     
-    def saveImageOCR(self):
-        img = cv2.imread(self.pathImage)
-        h, w = img.shape[:2]
-        for page in self.responsText.get("pages", []):
-            for block in page.get("blocks", []):
-                for line in block.get("lines", []):
-                    for word in line.get("words", []):
-                        if float(word["confidence"]) < 0.6:
-                            continue
+    # def saveImageOCR(self):
+    #     img = cv2.imread(self.pathImage)
+    #     h, w = img.shape[:2]
+    #     for page in self.responsText.get("pages", []):
+    #         for block in page.get("blocks", []):
+    #             for line in block.get("lines", []):
+    #                 for word in line.get("words", []):
+    #                     if float(word["confidence"]) < 0.6:
+    #                         continue
 
-                        (x1, y1), (x2, y2) = word["geometry"]
+    #                     (x1, y1), (x2, y2) = word["geometry"]
 
-                        x1 = int(x1 * w)
-                        y1 = int(y1 * h)
-                        x2 = int(x2 * w)
-                        y2 = int(y2 * h)
+    #                     x1 = int(x1 * w)
+    #                     y1 = int(y1 * h)
+    #                     x2 = int(x2 * w)
+    #                     y2 = int(y2 * h)
 
-                        cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
+    #                     cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
 
-        cv2.imwrite("storage/images/ocr_result.jpg", img)
+    #     cv2.imwrite("storage/images/ocr_result.jpg", img)
 
 
    

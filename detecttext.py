@@ -61,10 +61,13 @@ class TextOCRMobile:
                     for word in line.get("words", []):
                         if len(word["value"])>= 2 and float(word['confidence']) >= 0.60:
                             response_list.append(word['value'])
+  
 
- 
-
+        
         self.responsText = ' '.join(response_list)
+
+        if self.responsText == "":
+            self.responsText = "No have text on image"
 
 
         listRemove = [self.pathImage ]

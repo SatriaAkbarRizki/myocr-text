@@ -1,6 +1,7 @@
 import cv2
 import os
 
+from fastapi import HTTPException
 from onnxtr.io import DocumentFile
 from onnxtr.models import ocr_predictor, EngineConfig
 from onnxruntime.quantization import quantize_dynamic, QuantType
@@ -68,6 +69,7 @@ class TextOCRMobile:
 
         if self.responsText == "":
             self.responsText = "No have text on image"
+
 
 
         listRemove = [self.pathImage ]

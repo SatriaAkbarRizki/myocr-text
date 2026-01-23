@@ -38,9 +38,14 @@ def uploadImage(file: UploadFile | None = None, key: str = Depends(header_scheme
 
                 objService.saveImageTempUpload()
                 objTextOCR.doDetectOCR()
+                if objTextOCR.responsText == "No have text on image":
+                     raise HTTPException(status_code=422, detail= "No Detect Text On Image")
                 return {"status" : "success" ,"message" : objTextOCR.responsText}
-        except:
-                raise HTTPException(status_code=500, detail= "Error saving image")
+        except HTTPException as e:
+                raise e
+        
+        except HTTPException as e:
+            raise HTTPException(status_code=500, detail= "Error saving image")
 
 
  
